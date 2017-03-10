@@ -4,7 +4,8 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Image
 } from 'react-native'
 
 let { height, width} = Dimensions.get('window')
@@ -33,6 +34,7 @@ class Box extends Component {
     this.state = {
       x: width/20,
       y: -height/20,
+      z: 0,
       vx: 32,
       vy: -16
     }
@@ -41,6 +43,7 @@ class Box extends Component {
 
   loop (tick) {
     this.setState({
+      z: this.state.z - tick,
       x: this.state.x + tick
     })
   }
@@ -57,7 +60,7 @@ class Box extends Component {
     // }
     //
     // window.requestAnimationFrame(step);
-    setInterval(() => this.loop(2), 5)
+    // setInterval(() => this.loop(5), 1)
   }
 
   render () {
@@ -69,13 +72,44 @@ class Box extends Component {
         left: this.state.x,
         position: 'absolute',
         backgroundColor: 'red'
+      },
+      screenBackground: {
+        flex: 1,
+        flexDirection: 'row',
+        left: this.state.z,
+        alignItems: 'center'
+      },
+      imageBackground: {
+        width: width,
+        height: height,
+        resizeMode: 'stretch'
       }
     }
+    let images = []
+    let imgWidth = 10
+
+    for(let i = 0; i < Math.ceil(width / imgWidth); i++) {
+      images.push((
+         <Image style={styles.imageBackground} source={require('./components/1.jpg')} />
+      ))
+    }
+
     return (
-      <View style={styles.box}>
+      <View style={styles.screenBackground}>
+        {
+         images.map((img, index) => {
+           return (
+             <View key={index}>{img}</View>
+           )
+         })
+        }
+        <View style={styles.box}>
+        </View>
       </View>
     )
   }
 }
+
+//{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}
 
 export default App
