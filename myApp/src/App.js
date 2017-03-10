@@ -10,33 +10,18 @@ import {
 
 let { height, width} = Dimensions.get('window')
 // 375, 667
-console.log(height, width);
-var SIZE = 4; // four-by-four grid
-var CELL_SIZE = Math.floor(width * .2); // 20% of the screen width
-var CELL_PADDING = Math.floor(CELL_SIZE * .05); // 5% of the cell size
-var BORDER_RADIUS = CELL_PADDING * 2;
-var TILE_SIZE = CELL_SIZE - CELL_PADDING * 2;
-var LETTER_SIZE = Math.floor(TILE_SIZE * .75);
 
 class App extends Component {
-  render () {
-    return (
-      <View>
-        <Box />
-      </View>
-    )
-  }
-}
-
-class Box extends Component {
   constructor () {
     super()
     this.state = {
-      x: width/20,
-      y: -height/20,
+      x1: 20,
+      y1: 175,
+      x2: 545,
+      y2: 100,
       z: 0,
-      vx: 32,
-      vy: -16
+      vx: 1,
+      vy: -1
     }
     this.loop = this.loop.bind(this)
   }
@@ -44,23 +29,20 @@ class Box extends Component {
   loop (tick) {
     this.setState({
       z: this.state.z - tick,
-      x: this.state.x + tick
+      x1: this.state.x1 + tick,
+      x2: this.state.x2 - (this.state.vx * tick),
+      y2: this.state.y2 + (this.state.vy * tick)
     })
+
+    if(this.state.y2 < 0 || this.state.y2 > 287) {
+      this.setState({
+        vy: this.state.vy * -1
+      })
+    }
   }
 
   componentDidMount () {
-    // let start = null
-    // let step = (timestamp) => {
-    //   if (!start) start = timestamp;
-    //   let progress = timestamp - start;
-    //   this.loop(Math.min(progress / 100, 200))
-    //   if (progress < 2000) {
-    //     window.requestAnimationFrame(step);
-    //   }
-    // }
-    //
-    // window.requestAnimationFrame(step);
-    // setInterval(() => this.loop(5), 1)
+    // setInterval(() => this.loop(1), 1)
   }
 
   render () {
@@ -68,10 +50,18 @@ class Box extends Component {
       box: {
         width: 30,
         height: 30,
-        top: this.state.y,
-        left: this.state.x,
+        top: this.state.y1,
+        left: this.state.x1,
         position: 'absolute',
         backgroundColor: 'red'
+      },
+      box2: {
+        width: 30,
+        height: 30,
+        top: this.state.y2,
+        left: this.state.x2,
+        position: 'absolute',
+        backgroundColor: 'blue'
       },
       screenBackground: {
         flex: 1,
@@ -82,7 +72,7 @@ class Box extends Component {
       imageBackground: {
         width: width,
         height: height,
-        resizeMode: 'stretch'
+        resizeMode: 'contain'
       }
     }
     let images = []
@@ -105,11 +95,13 @@ class Box extends Component {
         }
         <View style={styles.box}>
         </View>
+        <View style={styles.box2}>
+        </View>
       </View>
     )
   }
 }
 
-//{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}
+
 
 export default App
