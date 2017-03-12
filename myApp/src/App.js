@@ -29,9 +29,7 @@ class App extends Component {
   loop (tick) {
     this.setState({
       z: this.state.z - tick,
-      x1: this.state.x1 + tick,
-      x2: this.state.x2 - (this.state.vx * tick),
-      y2: this.state.y2 + (this.state.vy * tick)
+      x1: this.state.x1 + tick
     })
 
     if(this.state.y2 < 0 || this.state.y2 > 287) {
@@ -86,13 +84,7 @@ class App extends Component {
 
     return (
       <View style={styles.screenBackground}>
-        {
-         images.map((img, index) => {
-           return (
-             <View key={index}>{img}</View>
-           )
-         })
-        }
+
         <View style={styles.box}>
         </View>
         <View style={styles.box2}>
@@ -102,6 +94,14 @@ class App extends Component {
   }
 }
 
-
+/*
+{
+ images.map((img, index) => {
+   return (
+     <View key={index}>{img}</View>
+   )
+ })
+}
+*/
 
 export default App
