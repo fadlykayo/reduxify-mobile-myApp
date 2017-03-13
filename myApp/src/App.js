@@ -8,17 +8,18 @@ import {
   Image
 } from 'react-native'
 
-let { height, width} = Dimensions.get('window')
+let { height, width } = Dimensions.get('window')
 // 375, 667
+// 287, 537
 
 class App extends Component {
   constructor () {
     super()
     this.state = {
-      x1: 20,
-      y1: 175,
-      x2: 545,
-      y2: 100,
+      x: 20,
+      y: -15,
+      xEnemy: 650,
+      yEnemy: 0,
       z: 0,
       vx: 1,
       vy: -1
@@ -28,11 +29,10 @@ class App extends Component {
 
   loop (tick) {
     this.setState({
-      z: this.state.z - tick,
-      x1: this.state.x1 + tick
+      xEnemy: this.state.xEnemy - (this.state.vx * tick * 2),
+      yEnemy: this.state.yEnemy + (this.state.vy * tick * 2)
     })
-
-    if(this.state.y2 < 0 || this.state.y2 > 287) {
+    if(this.state.yEnemy < -187 || this.state.yEnemy >= 155) {
       this.setState({
         vy: this.state.vy * -1
       })
@@ -40,7 +40,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    // setInterval(() => this.loop(1), 1)
+    setInterval(() => this.loop(1), 1)
   }
 
   render () {
@@ -48,16 +48,16 @@ class App extends Component {
       box: {
         width: 30,
         height: 30,
-        top: this.state.y1,
-        left: this.state.x1,
+        top: this.state.y,
+        left: this.state.x,
         position: 'absolute',
         backgroundColor: 'red'
       },
       box2: {
         width: 30,
         height: 30,
-        top: this.state.y2,
-        left: this.state.x2,
+        top: this.state.yEnemy,
+        left: this.state.xEnemy,
         position: 'absolute',
         backgroundColor: 'blue'
       },
@@ -73,18 +73,9 @@ class App extends Component {
         resizeMode: 'contain'
       }
     }
-    let images = []
-    let imgWidth = 10
-
-    for(let i = 0; i < Math.ceil(width / imgWidth); i++) {
-      images.push((
-         <Image style={styles.imageBackground} source={require('./components/1.jpg')} />
-      ))
-    }
 
     return (
-      <View style={styles.screenBackground}>
-
+      <View>
         <View style={styles.box}>
         </View>
         <View style={styles.box2}>
@@ -93,15 +84,5 @@ class App extends Component {
     )
   }
 }
-
-/*
-{
- images.map((img, index) => {
-   return (
-     <View key={index}>{img}</View>
-   )
- })
-}
-*/
 
 export default App
