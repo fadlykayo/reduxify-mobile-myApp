@@ -55,7 +55,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    setInterval(() => this.loop(1), 1000)
+    // setInterval(() => this.loop(1), 1000)
   }
 
   render () {
